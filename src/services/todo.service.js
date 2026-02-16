@@ -1,40 +1,38 @@
 // WILL NEVER HAVE ANYTHING RELATED
 // TO HTTP CALLS OR RESPONSES
-import ToDoModel from "../models/todo.models.js"
+import { 
+    getAllTodos, 
+    createTodo, 
+    toggleTodo, 
+    deleteTodo, 
+    getIncompleteTodos, 
+    getTodoById 
+} from "../models/todo.models.js";
 
-function getTodosService(){
-    return ToDoModel.getAllTodos();
+export async function getTodosService(){
+    return await getAllTodos();
 }
 
-function createTodoService(task){
+export async function createTodoService(task){
     if(!task || typeof task !=="string" || task.trim()===""){
         // return res.status(400).json({error:"task is required. You should provide non-empty string"});
         throw new Error("Invalid task")
     }
-    return ToDoModel.createTodo(task);
+    return await createTodo(task);
 }
 
-function toggleTodoByIdService(id){
-    const todo = todos.find(t => t.id === id);
-    if(!todo){
-        return null;
-    }
-    return ToDoModel.toggleTodoById(todo);
+export async function toggleTodoByIdService(id){
+    return await toggleTodo(id);
 }
 
-function deleteTodoByIdService(id){
-    const todoIndex = todos.findIndex(t => t.id === id);
-
-    if(todoIndex === -1){
-        return null;
-    }
-
-    return deleteTodo(todo);
+export async function deleteTodoByIdService(id){
+    return await deleteTodo(id);
 }
 
-export default {
-    getTodosService,
-    createTodoService,
-    toggleTodoByIdService,
-    deleteTodoByIdService
+export async function getIncompleteTodosService(){
+    return await getIncompleteTodos();
+}
+
+export async function getTodoByIdService(id){
+    return await getTodoById(id);
 }

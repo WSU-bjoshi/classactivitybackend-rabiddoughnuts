@@ -1,44 +1,60 @@
+import pool from "../db/connection.js"
+
 let nextId = 3;
 
-const todos =[
+let todos =[
     {id:1, task:"Try to have fun with express", done:false},
     {id:2, task:"buy eggs", done:false}
 ]
 
-function getAllTodos(){
-    return todos;
+export async function getAllTodos(){
+    const [rows] = await pool.query("SELECT * FROM todos")
+    console.log(rows);
+    return rows;
 }
 
-function createTodo(task){
-    const todo = {id: nextId++, task:task.trim(), done: false};
-    todos.push(todo);
-    return todo;
+export async function createTodo(task) {
+    // 1. Insert the new todo
+    const [result] = await pool.query("INSERT INTO todos (task) VALUES (?)", [task]);
+    // 2. Fetch the newly inserted todo to return it
+    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [result.insertId]);
+    return rows[0]; 
 }
 
-function toggleTodo(todo){
-    todo.done= !todo.done;
-    return todo;
+export async function toggleTodo(id) {
+    // 1. Fetch current status
+    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    if (rows.length === 0) return null;
+
+    const todo = rows[0];
+    const newStatus = !todo.completed;
+    
+    // 2. Update with new status
+    await pool.query("UPDATE todos SET completed = ? WHERE id = ?", [newStatus, id]);
+
+    // 3. Return updated todo
+    const [updatedRows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    return updatedRows[0];
 }
 
-function getIncompleteTodos(){
-    const incomplete = todos.filter(t => !t.done);
-    return incomplete;
+export async function getIncompleteTodos() {
+    const [rows] = await pool.query("SELECT * FROM todos WHERE completed = 0");
+    return rows;
 }
 
-function getTodoById(id){
-    const todo = todos.find(t => t.id === id);
-    return todo ?? null;
+export async function getTodoById(id) {
+    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    return rows[0] || null;
 }
 
-function deleteTodo(todo){
-    return todos.splice(todoIndex, 1)[0];
-}
+export async function deleteTodo(id) {
+    // 1. Check if exists
+    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    if (rows.length === 0) return null;
 
-export default {
-    getAllTodos,
-    createTodo,
-    toggleTodo,
-    getIncompleteTodos,
-    getTodoById,
-    deleteTodo
+    // 2. Delete
+    await pool.query("DELETE FROM todos WHERE id = ?", [id]);
+    
+    // 3. Return the deleted item (similar to how splice returned it)
+    return rows[0];
 }

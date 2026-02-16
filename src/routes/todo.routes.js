@@ -13,4 +13,3 @@ router.patch("/:id/toggle", toggleTodo);
 router.delete("/:id", deleteTodo);
 
 export default router;
-
