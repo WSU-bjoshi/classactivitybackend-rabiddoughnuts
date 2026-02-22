@@ -1,5 +1,7 @@
 import pool from "../db/connection.js"
 
+import Todo from "./Todo.js"
+
 let nextId = 3;
 
 let todos =[
@@ -8,17 +10,19 @@ let todos =[
 ]
 
 export async function getAllTodos(){
-    const [rows] = await pool.query("SELECT * FROM todos")
-    console.log(rows);
-    return rows;
+    // const [rows] = await pool.query("SELECT * FROM todos")
+    // console.log(rows);
+    // return rows;
+    return await Todo.findAll({order: [["id", "ASC"]]});
 }
 
 export async function createTodo(task) {
-    // 1. Insert the new todo
-    const [result] = await pool.query("INSERT INTO todos (task) VALUES (?)", [task]);
-    // 2. Fetch the newly inserted todo to return it
-    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [result.insertId]);
-    return rows[0]; 
+    // // 1. Insert the new todo
+    // const [result] = await pool.query("INSERT INTO todos (task) VALUES (?)", [task]);
+    // // 2. Fetch the newly inserted todo to return it
+    // const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [result.insertId]);
+    // return rows[0]; 
+    return await Todo.create({task});
 }
 
 export async function toggleTodo(id) {
