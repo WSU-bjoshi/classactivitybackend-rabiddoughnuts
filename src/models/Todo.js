@@ -11,7 +11,7 @@ const Todo = sequelize.define(
         },
         tasks: {
             type: DataTypes.STRING(255),
-            allowNull: true
+            allowNull: false
         },
         completed: {
             type: DataTypes.BOOLEAN,
@@ -20,7 +20,7 @@ const Todo = sequelize.define(
         },
         in_use: {
             type: DataTypes.BOOLEAN,
-            allowNull: true,
+            allowNull: false,
             defaultValue: true
         },
         user_id: {
@@ -34,7 +34,7 @@ const Todo = sequelize.define(
     },
     {
         tableName: "todos",
-        timestamps: false
+        timestamps: true
     }
 );
 

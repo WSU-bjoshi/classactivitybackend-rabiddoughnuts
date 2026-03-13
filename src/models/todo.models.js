@@ -17,48 +17,52 @@ export async function getAllTodos(){
 }
 
 export async function createTodo(task) {
-    // // 1. Insert the new todo
     // const [result] = await pool.query("INSERT INTO todos (task) VALUES (?)", [task]);
-    // // 2. Fetch the newly inserted todo to return it
     // const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [result.insertId]);
     // return rows[0]; 
     return await Todo.create({task});
 }
 
+// TODO - maybe old? needs to be rechecked
 export async function toggleTodo(id) {
-    // 1. Fetch current status
-    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
-    if (rows.length === 0) return null;
+    const todo = todos.find(t => t.id === id);
+    if(!todo){  return null;    }
 
-    const todo = rows[0];
-    const newStatus = !todo.completed;
+    todo.done = !todo.done;
+    return todo;
+    // const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    // if (rows.length === 0) return null;
+
+    // const todo = rows[0];
+    // const newStatus = !todo.completed;
     
-    // 2. Update with new status
-    await pool.query("UPDATE todos SET completed = ? WHERE id = ?", [newStatus, id]);
+    // await pool.query("UPDATE todos SET completed = ? WHERE id = ?", [newStatus, id]);
 
-    // 3. Return updated todo
-    const [updatedRows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
-    return updatedRows[0];
+    // const [updatedRows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    // return updatedRows[0];
 }
 
+// TODO - OLD needs to be rechecked
 export async function getIncompleteTodos() {
     const [rows] = await pool.query("SELECT * FROM todos WHERE completed = 0");
     return rows;
 }
 
+// TODO - OLD needs to be rechecked
 export async function getTodoById(id) {
     const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
     return rows[0] || null;
 }
 
+// TODO - maybe old? needs to be rechecked
 export async function deleteTodo(id) {
-    // 1. Check if exists
-    const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
-    if (rows.length === 0) return null;
+    const todoIndex = todos.findIndex(t => t.id === id);
+    if(todoIndex === -1){   return null;    }
+    return todos.splice(id, 1)[0];
+    // const [rows] = await pool.query("SELECT * FROM todos WHERE id = ?", [id]);
+    // if (rows.length === 0) return null;
 
-    // 2. Delete
-    await pool.query("DELETE FROM todos WHERE id = ?", [id]);
+    // await pool.query("DELETE FROM todos WHERE id = ?", [id]);
     
-    // 3. Return the deleted item (similar to how splice returned it)
-    return rows[0];
+    // return rows[0];
 }

@@ -4,19 +4,29 @@ import sequelize from "../db/sequelize.js";
 const User = sequelize.define(
     "User",
     {
-        user_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
+        user_id:{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement:true
         },
-        user_name: {
+        user_name:{
             type: DataTypes.STRING(255),
-            allowNull: true
+            allowNull:true
+        },
+        user_email:{
+            type: DataTypes.STRING(255),
+            allowNull:false,
+            unique: true
+        },
+        user_password:{
+            type: DataTypes.STRING(255),
+            allowNull: false
         }
     },
     {
         tableName: "users",
-        timestamps: false
+        timestamps: true,
+        indexes: [{unique:true, fields:["user_email"]}]
     }
 );
 

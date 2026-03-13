@@ -29,10 +29,6 @@ export async function createTodos(req, res) {
 export async function toggleTodo(req, res) {
     try {
         const id = Number(req.params.id);
-        if (Number.isNaN(id)) {
-            return res.status(400).json({ error: "Invalid id" });
-        }
-        
         const todo = await toggleTodoByIdService(id);
     
         if (!todo) {
@@ -73,10 +69,6 @@ export async function getTodo(req, res) {
 export async function deleteTodo(req, res) {
     try {
         const id = Number(req.params.id);
-        if (Number.isNaN(id)) {
-            return res.status(400).json({ error: "Invalid id" });
-        }
-        
         const todo = await deleteTodoByIdService(id);
     
         if (!todo) {
