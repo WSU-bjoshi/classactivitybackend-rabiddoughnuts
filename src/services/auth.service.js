@@ -5,10 +5,10 @@ import { where } from "sequelize";
 
 const SALT_ROUNDS = 10;
 
-export async function register({name, email, password}){
+export async function register({name, email, password, role}){
     const normalizeEmail = email.toLowerCase();
 
-    const existing = await User.findOne({where: {email: normalizeEmail}});
+    const existing = await User.findOne({where: {user_email: normalizeEmail}});
     if (existing){
         return {ok: false, status: 409, error: "Email already registered"};
     }
@@ -18,12 +18,13 @@ export async function register({name, email, password}){
     const user = await User.create({
         user_name: name,
         user_email: normalizeEmail,
-        user_password: passwordHash
+        user_password: passwordHash,
+        user_role: role
     });
 
     const token = signAccessToken( {sub: String(user.user_id), email: user.user_email})
 
-    return {ok: true, data: {token, user: {id: user.user_id, name: user.user_name}}}
+    return {ok: true, data: {token, user: {id: user.user_id, name: user.user_name, role: user.user_role}}}
 }
 
 export async function login({email, password}){
@@ -35,11 +36,11 @@ export async function login({email, password}){
         return {ok: false, status: 401, error: "Invalid credentials"};
     }
 
-    const match = await bcrypt.compare(password, user.passwordHash);
+    const match = await bcrypt.compare(password, user.user_password);
     if(!match){
         return {ok: false, status: 401, error: "Invalid credential"};
     }
 
     const token = signAccessToken({sub: String(user.user_id), email: user.user_email});
-    return {ok: true, data: {token, user: {id: user.user_id, name: user_name, email: user_email}}};
+    return {ok: true, data: {token, user: {id: user.user_id, name: user.user_name, email: user.user_email, role: user.user_role}}};
 }

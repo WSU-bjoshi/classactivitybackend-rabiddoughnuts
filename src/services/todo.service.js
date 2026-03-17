@@ -9,16 +9,16 @@ import {
     getTodoById 
 } from "../models/todo.models.js";
 
-export async function getTodosService(){
-    return await getAllTodos();
+export async function getTodosService(userId){
+    return await getAllTodos(userId);
 }
 
-export async function createTodoService(task){
+export async function createTodoService(userId, task){
     if(!task || typeof task !=="string" || task.trim()===""){
         // return res.status(400).json({error:"task is required. You should provide non-empty string"});
         throw new Error("Invalid task")
     }
-    return await createTodo(task);
+    return await createTodo(userId, task);
 }
 
 export async function toggleTodoByIdService(id){
