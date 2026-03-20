@@ -6,8 +6,9 @@ import { requireAuth } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-// Apply auth middleware to all routes
 router.use(requireAuth);
+
+router.use(requireRole("admin", "staff", "users"));
 
 router.get("/", listTodos);
 router.get("/incomplete", incompleteTodos);

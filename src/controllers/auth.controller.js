@@ -18,3 +18,7 @@ export async function login(req, res){
 
     return res.status(200).json(result.data);
 }
+
+// TODO password reset
+// TODO Limit registration to "user" only from Normal UI
+// TODO Registration for admin needs to be seperate from normal user
