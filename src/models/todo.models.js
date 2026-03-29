@@ -1,4 +1,4 @@
-import pool from "../db/connection.js"
+// import pool from "../db/connection.js"
 import Todo from "./Todo.js"
 import { Op } from "sequelize";
 
