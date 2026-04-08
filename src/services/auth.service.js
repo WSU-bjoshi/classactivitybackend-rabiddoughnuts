@@ -5,7 +5,7 @@ import { where } from "sequelize";
 
 const SALT_ROUNDS = 10;
 
-export async function register({name, email, password, role}){
+export async function register({name, email, password}){
     const normalizeEmail = email.toLowerCase();
 
     const existing = await User.findOne({where: {user_email: normalizeEmail}});
@@ -19,7 +19,7 @@ export async function register({name, email, password, role}){
         user_name: name,
         user_email: normalizeEmail,
         user_password: passwordHash,
-        user_role: role
+        user_role: "user"
     });
 
     const token = signAccessToken( {sub: String(user.user_id), email: user.user_email})

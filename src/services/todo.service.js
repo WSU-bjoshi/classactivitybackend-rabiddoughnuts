@@ -1,12 +1,13 @@
-// WILL NEVER HAVE ANYTHING RELATED
-// TO HTTP CALLS OR RESPONSES
-import { 
-    getAllTodos, 
-    createTodo, 
-    toggleTodo, 
-    deleteTodo, 
-    getIncompleteTodos, 
-    getTodoById 
+// WILL NEVER HAVE ANYTHING RELATING TO HTTP CALLS OR RESPONSES
+
+// import { where } from "sequelize";
+import {
+    getAllTodos,
+    createTodo,
+    toggleTodo as toggleTodoModel,
+    deleteTodo as deleteTodoModel,
+    getIncompleteTodos,
+    getTodoById
 } from "../models/todo.models.js";
 
 export async function getTodosService(userId){
@@ -15,18 +16,17 @@ export async function getTodosService(userId){
 
 export async function createTodoService(userId, task){
     if(!task || typeof task !=="string" || task.trim()===""){
-        // return res.status(400).json({error:"task is required. You should provide non-empty string"});
         throw new Error("Invalid task")
     }
     return await createTodo(userId, task);
 }
 
 export async function toggleTodoByIdService(id){
-    return await toggleTodo(id);
+    return await toggleTodoModel(id);
 }
 
 export async function deleteTodoByIdService(id){
-    return await deleteTodo(id);
+    return await deleteTodoModel(id);
 }
 
 export async function getIncompleteTodosService(){
