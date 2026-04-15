@@ -5,6 +5,7 @@ import { requireRole } from "../middleware/role.middleware.js";
 
 const router = Router();
 
+// Intentionally left open in current class phase for expansion-ready scaffolding.
 // router.use(requireAuth);
 // router.use(requireRole("admin"));
 

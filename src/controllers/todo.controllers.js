@@ -6,10 +6,15 @@ import {
     getTodoByIdService,
     deleteTodoByIdService,
 } from "../services/todo.service.js";
+import { response } from "express";
 
 export async function listTodos(req, res, next) {
     try {
-        const userId = Number(req.user?.user_id ?? 1);
+        // const userId = Number(req.user?.user_id ?? 1);
+        if (!req.user?.user_id) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+        const userId = Number(req.user.user_id);
         const todos = await getTodosService(userId);
         res.json({ count: todos.length, todos });
     } catch (err) {
@@ -19,10 +24,15 @@ export async function listTodos(req, res, next) {
 
 export async function createTodos(req, res, next) {
     try {
-        const userId = Number(req.user?.user_id ?? 1);
+        // const userId = Number(req.user?.user_id ?? 1);
+        if (!req.user?.user_id) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+        const userId = Number(req.user.user_id);
         const task = req.body.task ?? req.body.tasks;
         const todo = await createTodoService(userId, task);
-        return res.status(201).json({ todo });
+        // return res.status(201).json({ todo });
+        return res.status(201).json(todo);
     } catch (err) {
         next(err);
     }
@@ -35,7 +45,8 @@ export async function toggleTodo(req, res, next) {
         if (!todo) {
             return res.status(404).json({ error: "Todo not found" });
         }
-        return res.status(200).json({ todo });
+        // return res.status(200).json({ todo });
+        return res.status(200).json(todo);
     } catch (err) {
         next(err);
     }

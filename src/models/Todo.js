@@ -34,8 +34,8 @@ const Todo = sequelize.define(
     },
     {
         tableName: "todos",
-        // timestamps: true,
-        timestamps: false
+        timestamps: true,
+        // timestamps: false
     }
 );
 

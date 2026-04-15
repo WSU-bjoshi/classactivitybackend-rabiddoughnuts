@@ -16,14 +16,12 @@ export async function requireAuth(req, res, next) {
         const user = await User.findByPk(userId, {attributes:["user_id", "user_name", "user_email", "user_role"]});
 
         if (!user) {
-            // return res.statuts(404).json({error: "User does not exist"});
             return res.status(404).json({error: "User does not exist"});
         }
 
         req.user = user;
         next();
-    }
-    catch (err){
+    } catch (err){
         return res.status(401).json({error:"Invalid Token"})
     }
 }

@@ -5,7 +5,8 @@ export function validateBody(requiredFields = []){
         );
         if(missing.length){
             return res.status(400).json({
-                error:`Misisng required fields: ${missing.join(", ")}`
+                // error:`Misisng required fields: ${missing.join(", ")}`
+                error:`Missing required fields: ${missing.join(",")}`
             })
         }
         next();
